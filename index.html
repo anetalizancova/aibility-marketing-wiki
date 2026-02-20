@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Workflow — Aibility</title>
+    <meta name="description" content="Systémový popis marketingového workflow týmu Aibility — kdo co dělá, jaké nástroje používáme a jak.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="css/iconoir.css" as="style">
+
+    <link rel="icon" type="image/png" href="favicon.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#0B1221">
+
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=Hedvig+Letters+Serif:opsz@12..24&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=Hedvig+Letters+Serif:opsz@12..24&display=swap" rel="stylesheet">
+    </noscript>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/iconoir.css">
+
+    <style>
+        /* ── Wiki Layout ── */
+        .wiki-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ── */
+        .wiki-sidebar {
+            grid-row: 2;
+            grid-column: 1;
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+            padding: var(--space-6) var(--space-4) var(--space-6) var(--space-6);
+            border-right: 1px solid var(--color-border);
+            background: var(--color-bg-secondary);
+            scrollbar-width: thin;
+        }
+
+        .wiki-sidebar::-webkit-scrollbar { width: 4px; }
+        .wiki-sidebar::-webkit-scrollbar-track { background: transparent; }
+        .wiki-sidebar::-webkit-scrollbar-thumb { background: var(--color-border-light); border-radius: 4px; }
+
+        .sidebar-label {
+            font-size: var(--text-xs);
+            font-weight: var(--font-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-tertiary);
+            margin-bottom: var(--space-3);
+            padding: 0 var(--space-2);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li + li { margin-top: 2px; }
+
+        .sidebar-nav a {
+            display: block;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            line-height: 1.4;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--color-bg-card-hover);
+            color: var(--color-text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(80, 0, 171, 0.08);
+            color: var(--color-accent-primary);
+            font-weight: var(--font-medium);
+        }
+
+        .sidebar-nav .sidebar-sub {
+            margin-left: var(--space-3);
+            margin-top: 2px;
+        }
+
+        .sidebar-nav .sidebar-sub a {
+            font-size: 0.8rem;
+            padding: 3px var(--space-3);
+            color: var(--color-text-tertiary);
+        }
+
+        .sidebar-nav .sidebar-sub a:hover,
+        .sidebar-nav .sidebar-sub a.active {
+            color: var(--color-accent-primary);
+        }
+
+        /* ── Main Content ── */
+        .wiki-main {
+            grid-row: 2;
+            grid-column: 2;
+            padding: var(--space-10) var(--space-12);
+            max-width: 900px;
+        }
+
+        /* ── Comment mode bar ── */
+        .comment-bar {
+            grid-row: 1;
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-2) var(--space-6);
+            background: var(--color-bg-card);
+            border-bottom: 1px solid var(--color-border);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            gap: var(--space-4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .comment-bar-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .comment-bar__logo {
+            height: 28px;
+            width: auto;
+        }
+
+        .comment-bar__title {
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            font-size: var(--text-sm);
+        }
+
+        .comment-bar__meta {
+            color: var(--color-text-tertiary);
+            font-size: var(--text-xs);
+        }
+
+        .comment-bar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .comment-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-full);
+            background: transparent;
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .comment-mode-toggle:hover {
+            background: var(--color-bg-card-hover);
+            color: var(--color-text-primary);
+        }
+
+        .comment-mode-toggle.active {
+            background: rgba(80, 0, 171, 0.08);
+            border-color: var(--color-accent-primary);
+            color: var(--color-accent-primary);
+        }
+
+        /* ── Sections ── */
+        .wiki-section {
+            margin-bottom: var(--space-16);
+            scroll-margin-top: 80px;
+            position: relative;
+        }
+
+        .wiki-section + .wiki-section {
+            padding-top: var(--space-10);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .wiki-section h2 {
+            font-family: var(--font-family-headings);
+            font-size: var(--text-3xl);
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-6);
+            line-height: var(--leading-tight);
+        }
+
+        .wiki-section h3 {
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            margin: var(--space-8) 0 var(--space-4);
+        }
+
+        .wiki-section h4 {
+            font-size: var(--text-base);
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            margin: var(--space-6) 0 var(--space-3);
+        }
+
+        .wiki-section p {
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            margin-bottom: var(--space-4);
+        }
+
+        /* ── Owner badges ── */
+        .owner {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: var(--font-semibold);
+            font-family: var(--font-family);
+        }
+
+        .owner--a { background: rgba(8, 145, 178, 0.1); color: #0891B2; }
+        .owner--j { background: rgba(124, 58, 237, 0.1); color: #7C3AED; }
+        .owner--aj { background: rgba(5, 150, 105, 0.1); color: #059669; }
+
+        .section-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .section-meta .badge {
+            font-size: var(--text-xs);
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--color-border-light);
+            color: var(--color-text-secondary);
+        }
+
+        /* ── Tables ── */
+        .wiki-table-wrap {
+            overflow-x: auto;
+            margin: var(--space-4) 0 var(--space-6);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .wiki-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--text-sm);
+        }
+
+        .wiki-table th {
+            background: var(--color-bg-secondary);
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            padding: var(--space-3) var(--space-4);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            white-space: nowrap;
+        }
+
+        .wiki-table td {
+            padding: var(--space-3) var(--space-4);
+            color: var(--color-text-secondary);
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+            line-height: var(--leading-relaxed);
+        }
+
+        .wiki-table tr:last-child td { border-bottom: none; }
+        .wiki-table tr:hover td { background: var(--color-bg-secondary); }
+
+        .wiki-table td strong { color: var(--color-text-primary); font-weight: var(--font-medium); }
+
+        /* ── Steps (numbered list) ── */
+        .wiki-steps {
+            list-style: none;
+            counter-reset: steps;
+        }
+
+        .wiki-steps li {
+            counter-increment: steps;
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            line-height: var(--leading-relaxed);
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .wiki-steps li::before {
+            content: counter(steps);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            background: rgba(80, 0, 171, 0.08);
+            color: var(--color-accent-primary);
+            border-radius: var(--radius-full);
+            font-weight: var(--font-semibold);
+            font-size: var(--text-sm);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .wiki-steps li strong { color: var(--color-text-primary); }
+
+        /* ── Checklist ── */
+        .wiki-checklist {
+            list-style: none;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
+            margin: var(--space-4) 0;
+        }
+
+        .wiki-checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-2) 0;
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            border-bottom: 1px solid var(--color-border);
+            line-height: var(--leading-relaxed);
+        }
+
+        .wiki-checklist li:last-child { border-bottom: none; }
+
+        .wiki-checklist li::before {
+            content: '';
+            display: block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-border-light);
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ── Code ── */
+        .wiki-code {
+            background: var(--code-bg);
+            border-radius: var(--radius-md);
+            padding: var(--space-4) var(--space-5);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--color-text-primary);
+            overflow-x: auto;
+            margin: var(--space-3) 0 var(--space-4);
+            line-height: 1.7;
+        }
+
+        code {
+            background: var(--code-bg);
+            border-radius: var(--radius-sm);
+            padding: 1px 6px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8em;
+            color: var(--color-accent-primary);
+        }
+
+        /* ── Bullet list ── */
+        .wiki-list {
+            list-style: none;
+            margin: var(--space-3) 0;
+        }
+
+        .wiki-list li {
+            padding: var(--space-1) 0 var(--space-1) var(--space-5);
+            position: relative;
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .wiki-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-accent-primary);
+            font-size: var(--text-xs);
+            top: 6px;
+        }
+
+        .wiki-list li strong { color: var(--color-text-primary); }
+
+        /* ── Note/callout ── */
+        .wiki-note {
+            background: rgba(80, 0, 171, 0.04);
+            border-left: 3px solid var(--color-accent-primary);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: var(--space-4) var(--space-5);
+            margin: var(--space-4) 0;
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* ── Sub-section card ── */
+        .wiki-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .wiki-card h4 {
+            margin-top: 0;
+            font-size: var(--text-base);
+        }
+
+        /* ── Comment system ── */
+        .section-comment-btn {
+            position: absolute;
+            top: 0;
+            right: -44px;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-tertiary);
+            font-size: 14px;
+            transition: all var(--transition-fast);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .comment-mode-on .wiki-section:hover .section-comment-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .section-comment-btn:hover {
+            background: rgba(80, 0, 171, 0.08);
+            border-color: var(--color-accent-primary);
+            color: var(--color-accent-primary);
+        }
+
+        .section-comment-btn.has-comments {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            background: rgba(80, 0, 171, 0.08);
+            border-color: var(--color-accent-primary);
+            color: var(--color-accent-primary);
+        }
+
+        .comment-panel {
+            display: none;
+            margin-top: var(--space-4);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+        }
+
+        .comment-panel.open { display: block; }
+
+        .comment-list { margin-bottom: var(--space-4); }
+
+        .comment-item {
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-2);
+            font-size: var(--text-sm);
+        }
+
+        .comment-item__author {
+            font-weight: var(--font-semibold);
+            color: var(--color-text-primary);
+            font-size: var(--text-xs);
+            margin-bottom: var(--space-1);
+        }
+
+        .comment-item__text {
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .comment-item__date {
+            color: var(--color-text-tertiary);
+            font-size: 11px;
+            margin-top: var(--space-1);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: var(--space-2) var(--space-3);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+            background: var(--color-bg-secondary);
+            resize: vertical;
+            transition: border-color var(--transition-fast);
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+        }
+
+        .comment-form textarea { min-height: 72px; }
+
+        .comment-form-row {
+            display: flex;
+            gap: var(--space-2);
+            align-items: flex-start;
+        }
+
+        .comment-form-row input { flex: 1; }
+
+        .comment-submit {
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-accent-primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity var(--transition-fast);
+        }
+
+        .comment-submit:hover { opacity: 0.85; }
+
+        .comment-count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: var(--color-accent-primary);
+            color: #fff;
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: var(--font-bold);
+            position: absolute;
+            top: -4px;
+            right: -4px;
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+            .wiki-layout { grid-template-columns: 1fr; }
+            .wiki-sidebar { display: none; }
+            .wiki-main { padding: var(--space-6) var(--space-4); grid-column: 1; }
+            .section-comment-btn { right: 0; top: -8px; }
+        }
+
+        /* ── Divider ── */
+        .wiki-divider {
+            border: none;
+            border-top: 1px solid var(--color-border);
+            margin: var(--space-8) 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wiki-layout">
+
+    <!-- ── Top bar ── -->
+    <div class="comment-bar" id="topBar">
+        <div class="comment-bar-left">
+            <img src="assets/logo/Aibility_logo_vector.svg" alt="Aibility" class="comment-bar__logo" fetchpriority="high">
+            <div>
+                <div class="comment-bar__title">Marketing Team Workflow</div>
+                <div class="comment-bar__meta">Aneta [A] &amp;&nbsp;Jakub [J] · aktualizace únor 2026</div>
+            </div>
+        </div>
+        <div class="comment-bar-right">
+            <button class="comment-mode-toggle" id="commentToggle" onclick="toggleCommentMode()">
+                <i class="iconoir-message-text"></i>
+                Komentáře
+            </button>
+        </div>
+    </div>
+
+    <!-- ── Sidebar ── -->
+    <aside class="wiki-sidebar" id="sidebar">
+        <p class="sidebar-label">Obsah</p>
+        <ul class="sidebar-nav" id="sidebarNav">
+            <li><a href="#team" class="active">1. Tým</a></li>
+            <li><a href="#stack">2. Tool Stack</a></li>
+            <li><a href="#webinare">3. Webináře</a></li>
+            <li><a href="#newsletter">4. Newsletter</a></li>
+            <li><a href="#social">5. Social Media</a></li>
+            <li><a href="#email-kampane">6. Email Kampaně</a></li>
+            <li><a href="#meta-ads">7. Meta Ads</a></li>
+            <li><a href="#linkedin-ads">8. LinkedIn Ads</a></li>
+            <li><a href="#google-ads">9. Google Ads</a></li>
+            <li><a href="#analytics">10. Analytics &amp;&nbsp;Tracking</a></li>
+            <li><a href="#automation">11. Automation Stack</a></li>
+            <li><a href="#scaling">12. Příležitosti</a></li>
+            <li><a href="#appendix">Appendix</a></li>
+        </ul>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main class="wiki-main" id="main-content">
+
+        <!-- 1. Tým -->
+        <section class="wiki-section" id="team">
+            <button class="section-comment-btn" onclick="toggleComments('team')" id="btn-team" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>1. Tým &amp;&nbsp;Odpovědnosti</h2>
+            <p>Dvojčlenný marketing tým. <span class="owner owner--a">[A] Aneta</span> vlastní content, email a&nbsp;social. <span class="owner owner--j">[J] Jakub</span> vlastní placené reklamy a&nbsp;analytiku.</p>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead>
+                        <tr><th>Oblast</th><th>Vlastník</th><th>Popis</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Newsletter</strong></td><td><span class="owner owner--a">[A]</span></td><td>Týdenní email celé Aibility audience</td></tr>
+                        <tr><td><strong>Webinář follow-up emaily</strong></td><td><span class="owner owner--a">[A]</span></td><td>Follow-up po každém webináři (do 24&nbsp;h)</td></tr>
+                        <tr><td><strong>B2B &amp;&nbsp;launch emaily</strong></td><td><span class="owner owner--a">[A]</span></td><td>Kampaňové emaily, sekvence</td></tr>
+                        <tr><td><strong>Social media (texty)</strong></td><td><span class="owner owner--a">[A]</span></td><td>Posty na&nbsp;LI, IG, FB, X, Threads</td></tr>
+                        <tr><td><strong>Social media (vizuály)</strong></td><td><span class="owner owner--a">[A]</span></td><td>Gemini, Trybloom, Banner Ad Tool, Social Visual Editor</td></tr>
+                        <tr><td><strong>Circle.so community</strong></td><td><span class="owner owner--a">[A]</span></td><td>Posty do&nbsp;Edu space + obecných prostorů</td></tr>
+                        <tr><td><strong>Strategie &amp;&nbsp;positioning</strong></td><td><span class="owner owner--a">[A]</span></td><td>Komunikační linka, messaging angles</td></tr>
+                        <tr><td><strong>Meta Ads</strong></td><td><span class="owner owner--j">[J]</span> + větší <span class="owner owner--aj">[A+J]</span></td><td>Tvorba a&nbsp;správa Meta kampaní (FB + IG)</td></tr>
+                        <tr><td><strong>Google Ads</strong></td><td><span class="owner owner--j">[J]</span></td><td>DSA + RSA kampaně</td></tr>
+                        <tr><td><strong>LinkedIn Ads</strong></td><td><span class="owner owner--a">[A]</span></td><td>Placené kampaně na&nbsp;LinkedIn</td></tr>
+                        <tr><td><strong>Analytics &amp;&nbsp;Tracking</strong></td><td><span class="owner owner--j">[J]</span></td><td>GTM, GA4, PostHog, pixely, consent</td></tr>
+                        <tr><td><strong>Webinář vizuály</strong></td><td><span class="owner owner--j">[J]</span></td><td>Základní promo grafiky pro webináře</td></tr>
+                        <tr><td><strong>Konverzní měření</strong></td><td><span class="owner owner--j">[J]</span></td><td>Definice a&nbsp;nasazení konverzních eventů</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="comment-panel" id="comments-team"></div>
+        </section>
+
+        <!-- 2. Tool Stack -->
+        <section class="wiki-section" id="stack">
+            <button class="section-comment-btn" onclick="toggleComments('stack')" id="btn-stack" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>2. Tool Stack</h2>
+
+            <h3>Email &amp;&nbsp;CRM</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Brevo</strong></td><td>Email marketing — tvorba, odesílání, segmentace, sekvence</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Brevo API + Python script</strong></td><td>Automatický upload HTML emailů jako draft, test email</td><td><span class="owner owner--a">[A]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Social Media</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Upload Post API</strong></td><td>Posting a&nbsp;scheduling na&nbsp;LI, IG, FB, X, Threads, TikTok, Pinterest — přes Cursor command <code>/upload-social</code></td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Social Visual Editor</strong></td><td>Generování sociálních grafik z&nbsp;SVG šablon (Node.js + Puppeteer)</td><td><span class="owner owner--a">[A]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Vizuály</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Gemini Image Gen</strong></td><td>Generování obrázků přes OpenRouter + Gemini 3, command <code>/generate-image</code></td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Gemini</strong> (standalone)</td><td>Rychlé generování vizuálů bez Cursoru</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Trybloom.ai</strong></td><td>Tvorba vizuálů a&nbsp;grafik</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Figma</strong></td><td>Editace a&nbsp;finální úpravy vizuálů, finalizace ad kreativy</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Banner Ad Tool</strong></td><td>Webová aplikace — 8&nbsp;šablon (story + square), inline editor, AI generování, export PNG, batch tvorba kampaní přes agenta v&nbsp;Cursoru</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Video Ad Maker</strong></td><td>Animovaná reklamní videa z&nbsp;HTML šablon (Remotion + React), úpravy přes Cursor</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>HeyGen API</strong> <em>(plánováno)</em></td><td>Generování video reklam s&nbsp;AI prezentátorem přímo z&nbsp;Cursoru</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Ad JSON → rebrand</strong></td><td>Stažení popisu existující reklamy jako JSON, přetvoření pro Aibility brand</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Community</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Circle.so</strong></td><td>Komunita — Edu stream space + obecné prostory</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Circle API + Cursor command</strong></td><td>Publikování přes <code>/circleedu</code> nebo <code>/circlepost</code> přímo z&nbsp;Cursoru</td><td><span class="owner owner--a">[A]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Paid Ads</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Meta Ads Manager</strong></td><td>Správa Facebook/Instagram kampaní</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Google Ads</strong></td><td>Search (RSA) + dynamické reklamy (DSA)</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Google Sheets</strong></td><td>Page feed pro DSA kampaně</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>MetaAutomator MCP</strong></td><td>Automatizované zakládání Meta kampaní přes Cursor</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Google Whisk</strong></td><td>Generování vizuálů pro Meta reklamy</td><td><span class="owner owner--j">[J]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Analytics &amp;&nbsp;Tracking</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Google Tag Manager</strong></td><td>Správa tagů, triggerů, consent managementu</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Google Analytics 4</strong></td><td>Webová analytika, konverze, audience</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>PostHog</strong></td><td>Product analytics, user behavior tracking</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Meta Pixel + CAPI</strong></td><td>Tracking konverzí pro Meta kampaně</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Google Ads Conversion</strong></td><td>Tracking konverzí pro Google kampaně</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>LinkedIn Insight Tag</strong></td><td>B2B audience tracking a&nbsp;konverze</td><td><span class="owner owner--j">[J]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>AI &amp;&nbsp;Automatizace</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Tool</th><th>K čemu</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Cursor + Claude</strong></td><td>AI asistent pro tvorbu obsahu, commands, agenti</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Cursor skills</strong></td><td>Specializované AI dovednosti (copy, positioning, newsletter, email sekvence…)</td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Markdown Share</strong></td><td>Sdílení <code>.md</code> souborů jako veřejných odkazů pro sdílení copy s&nbsp;týmem</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Tracking &amp;&nbsp;UTM</h3>
+            <div class="wiki-note">
+                Formát campaign name: <code>AIB_[PRODUCT]_[SOURCE]_[TYPE]_[PHASE]_[LANGUAGE]_[SUFFIX]</code><br>
+                Příklad: <code>AIB_WBN_BRO_5_RET_CZE_KlicAdopceAI</code> — viz <a href="#appendix">Appendix</a>
+            </div>
+
+            <div class="comment-panel" id="comments-stack"></div>
+        </section>
+
+        <!-- 3. Webináře -->
+        <section class="wiki-section" id="webinare">
+            <button class="section-comment-btn" onclick="toggleComments('webinare')" id="btn-webinare" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>3. Workflow: Webináře</h2>
+            <div class="section-meta">
+                <span class="badge">Každé 1–2&nbsp;týdny</span>
+                <span class="badge">Follow-up: <span class="owner owner--a">[A]</span></span>
+                <span class="badge">Vizuály + tracking: <span class="owner owner--j">[J]</span></span>
+            </div>
+
+            <h3>3a. Příprava před akcí</h3>
+            <div class="wiki-card">
+                <h4><span class="owner owner--a">[A]</span></h4>
+                <ul class="wiki-list">
+                    <li>Připravit promo obsah — texty na&nbsp;social (LI, IG, FB, X)</li>
+                    <li>Vytvořit promo emaily do&nbsp;Brevo (pokud je potřeba)</li>
+                    <li>Nastavit UTM parametry pro registrační link</li>
+                </ul>
+            </div>
+            <div class="wiki-card">
+                <h4><span class="owner owner--j">[J]</span></h4>
+                <ul class="wiki-list">
+                    <li>Připravit základní promo vizuály (grafiky pro sociály + event cover)</li>
+                    <li>Spustit Meta Ads — trigger je <strong>Slack reminder</strong> z&nbsp;automatizace (10 a&nbsp;14&nbsp;dní před akcí)</li>
+                    <li>Ověřit, že event tracking funguje</li>
+                </ul>
+            </div>
+
+            <h3>3b. Follow-up po webináři (do 24&nbsp;h)</h3>
+            <p>Celý proces patří <span class="owner owner--a">[A]</span></p>
+            <ol class="wiki-steps">
+                <li><strong>Transcript</strong> — přidat <code>.md</code> soubor do <code>content/emails/Webinars/</code></li>
+                <li><strong>Vygenerovat follow-up email</strong> — Cursor command <code>/fupwebinar</code> → vytvoří <code>.md</code> draft + <code>.html</code> email</li>
+                <li><strong>Doplnit linky</strong> — YouTube (záznam), SoundCloud (podcast), Google Drive (materiály), feedback form</li>
+                <li><strong>UTM parametry</strong> ke všem linkům — konvence: <code>AIB_WBN_BRO_5_RET_CZE_[NazevWebinare]</code></li>
+                <li><strong>Upload do Brevo</strong> — command <code>/brevo</code> → vytvoří draft, odešle test email</li>
+                <li><strong>Circle.so post</strong> — <code>/circleedu</code> (Edu space) + <code>/circlepost</code> (obecný space)</li>
+                <li><strong>Schválit a&nbsp;odeslat</strong> kampaň v&nbsp;Brevo (nebo naplánovat na&nbsp;ráno)</li>
+            </ol>
+            <ul class="wiki-checklist">
+                <li>Transcript <code>.md</code> přidán</li>
+                <li>Follow-up email vygenerován (<code>/fupwebinar</code>)</li>
+                <li>YouTube / SoundCloud / Drive linky doplněny</li>
+                <li>UTM parametry přidány ke všem linkům</li>
+                <li>Upload do Brevo (<code>/brevo</code>)</li>
+                <li>Test email zkontrolován</li>
+                <li>Circle.so post — Edu space</li>
+                <li>Circle.so post — obecný space</li>
+                <li>Kampaň odeslána / naplánována</li>
+            </ul>
+
+            <h3>3c. AI Morning Show</h3>
+            <div class="wiki-note">
+                Samostatný live stream formát. Follow-up flow je stejný jako u&nbsp;webinářů, jen s&nbsp;vlastními commands:<br><br>
+                <code>/AIMSfupmail</code> — follow-up email ze záznamu/přepisu (šablona v <code>content/emails/AI Morning Show/</code>)<br>
+                <code>/AIMScircle</code> — Circle post jako <code>.md</code> → pak <code>/circlepost</code> k&nbsp;publikaci
+            </div>
+
+            <div class="comment-panel" id="comments-webinare"></div>
+        </section>
+
+        <!-- 4. Newsletter -->
+        <section class="wiki-section" id="newsletter">
+            <button class="section-comment-btn" onclick="toggleComments('newsletter')" id="btn-newsletter" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>4. Workflow: Newsletter</h2>
+            <div class="section-meta">
+                <span class="badge">Každý týden</span>
+                <span class="badge"><span class="owner owner--a">[A]</span></span>
+            </div>
+            <ol class="wiki-steps">
+                <li><strong>Obsah</strong> — napsat v&nbsp;Markdownu, umístění: <code>content/emails/NEWSLETTER/</code></li>
+                <li><strong>HTML verze</strong> — šablona z&nbsp;<code>NEWSLETTER/</code> nebo Email Builder — zkontrolovat mobil, dark mode, emoji</li>
+                <li><strong>Campaign name</strong> — formát: <code>AIB_GEN_BRO_5_RET_CZE_Newsletter[MesicRok]</code></li>
+                <li><strong>UTM parametry</strong> ke všem linkům</li>
+                <li><strong>Upload do Brevo</strong> — command <code>/brevo</code> → draft + test email</li>
+                <li><strong>Zkontrolovat</strong> v&nbsp;Brevo — subject, odesílatel, zobrazení, CTA linky</li>
+                <li><strong>Odeslat / naplánovat</strong> — standardně út nebo st ráno (8–9&nbsp;h)</li>
+            </ol>
+            <ul class="wiki-checklist">
+                <li>Obsah napsán</li>
+                <li>HTML šablona hotová</li>
+                <li>Campaign name vygenerován</li>
+                <li>UTM parametry na všech linkách</li>
+                <li>Upload do Brevo (<code>/brevo</code>)</li>
+                <li>Test email zkontrolován</li>
+                <li>Kampaň naplánována / odeslána</li>
+            </ul>
+
+            <h3>4b. AI Edu NL</h3>
+            <p>Samostatný týdenní newsletter pro účastníky <strong>AI Edu Streamu</strong> (jiný seznam než hlavní Aibility newsletter). Tvorba přes command <code>/AIEduNL</code> — zadáš tip týdne, události a&nbsp;CTA, command nejdřív vygeneruje text ke schválení, pak HTML. Šablony v&nbsp;<code>content/emails/AI Edu NL/</code>.</p>
+
+            <div class="comment-panel" id="comments-newsletter"></div>
+        </section>
+
+        <!-- 5. Social Media -->
+        <section class="wiki-section" id="social">
+            <button class="section-comment-btn" onclick="toggleComments('social')" id="btn-social" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>5. Workflow: Social Media</h2>
+            <div class="section-meta">
+                <span class="badge">2–3× týdně</span>
+                <span class="badge"><span class="owner owner--a">[A]</span></span>
+                <span class="badge">LI · IG · FB · X · Threads</span>
+            </div>
+
+            <h3>5a. Tvorba textu</h3>
+            <ol class="wiki-steps">
+                <li>Vytvořit <code>.md</code> soubor v&nbsp;<code>content/socials/texty/</code> ze šablony <code>_TEMPLATE-social-post.md</code></li>
+                <li>Napsat texty pro každou platformu — různý tón, délka a&nbsp;styl (LI: thought leadership · IG: vizuální + hashtagy · X: max 280 znaků · Threads: casual)</li>
+                <li>Nastavit <code>STATUS: ready</code> jakmile je text hotový</li>
+            </ol>
+
+            <h3>5b. Vizuály</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Nástroj</th><th>Kdy použít</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Gemini</strong> (<code>/generate-image</code> nebo standalone)</td><td>Rychlé generování fotek / ilustrací</td></tr>
+                        <tr><td><strong>Trybloom.ai</strong></td><td>Grafiky, brandové vizuály</td></tr>
+                        <tr><td><strong>Banner Ad Tool</strong></td><td>Brandované grafiky ze šablon (story + square), export PNG</td></tr>
+                        <tr><td><strong>Social Visual Editor</strong></td><td>SVG šablony pro AI Edu Stream a&nbsp;podobné série</td></tr>
+                        <tr><td><strong>Figma</strong></td><td>Finální editace, úpravy existujících grafik</td></tr>
+                        <tr><td><strong>Ad JSON → rebrand</strong></td><td>Stáhnout JSON existující reklamy → přetvořit pro Aibility brand</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>5c. Posting</h3>
+            <ol class="wiki-steps">
+                <li>Command <code>/upload-social [PLATFORMY] [ČAS]</code> — např. <code>/upload-social LI X THR</code> nebo <code>/upload-social IG FB zítra 10:00</code></li>
+                <li>Zadat text postu a&nbsp;médium (URL obrázku nebo "bez vizuálu")</li>
+                <li>Alternativa: <code>/socialpost-auto</code> — přečte <code>.md</code> soubor, naparsuje sekce, postuje přes Upload Post API</li>
+            </ol>
+            <ul class="wiki-checklist">
+                <li><code>.md</code> soubor vytvořen ze šablony</li>
+                <li>Texty napsány pro každou platformu</li>
+                <li><code>STATUS: ready</code> nastaveno</li>
+                <li>Vizuál vygenerován (pokud potřeba)</li>
+                <li><code>/upload-social</code> nebo <code>/socialpost-auto</code> — preview schváleno</li>
+                <li>Post odeslán / naplánován</li>
+            </ul>
+
+            <div class="comment-panel" id="comments-social"></div>
+        </section>
+
+        <!-- 6. Email Kampaně -->
+        <section class="wiki-section" id="email-kampane">
+            <button class="section-comment-btn" onclick="toggleComments('email-kampane')" id="btn-email-kampane" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>6. Workflow: Email Kampaně</h2>
+            <div class="section-meta">
+                <span class="badge">B2B · Launch · Sekvence</span>
+                <span class="badge"><span class="owner owner--a">[A]</span></span>
+            </div>
+            <ol class="wiki-steps">
+                <li><strong>Obsah</strong> — napsat v&nbsp;Markdownu, šablona: <code>content/emails/Aibility B2B Email Template.html</code></li>
+                <li><strong>HTML</strong> — šablona nebo Email Builder — zkontrolovat Outlook (VML tlačítka), mobil, dark mode</li>
+                <li><strong>Campaign name</strong> — B2B: <code>AIB_GEN_BRO_5_CON_CZE_B2B-Osloveni</code> · Launch: <code>AIB_AIM_BRO_5_DEC_CZE_LaunchMar26</code></li>
+                <li><strong>UTM parametry</strong> na všechny linky</li>
+                <li><strong>Upload do Brevo</strong> — <code>/brevo</code> · pro sekvence: nastavit jako automation workflow v&nbsp;Brevo</li>
+                <li><strong>Segmentace</strong> — celá audience / B2B segment / webinář registrovaní</li>
+                <li>Test email → schválení → odeslání</li>
+            </ol>
+
+            <div class="comment-panel" id="comments-email-kampane"></div>
+        </section>
+
+        <!-- 7. Meta Ads -->
+        <section class="wiki-section" id="meta-ads">
+            <button class="section-comment-btn" onclick="toggleComments('meta-ads')" id="btn-meta-ads" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>7. Workflow: Meta Ads</h2>
+            <div class="section-meta">
+                <span class="badge">Průběžně</span>
+                <span class="badge">Primárně <span class="owner owner--j">[J]</span>, větší <span class="owner owner--aj">[A+J]</span></span>
+            </div>
+
+            <ol class="wiki-steps">
+                <li><strong>Ověřit konverze</strong> — pokud chybí nebo nejsou spolehlivé → nejdřív nasadit tracking (viz sekce 10)</li>
+                <li><strong>Generovat copy</strong> — Cursor command <code>meta-ads-image-headlines</code> (headlines) + <code>meta-ads-copy-pack</code> (kompletní copy) — pracuje s&nbsp;Aibility product-bible a&nbsp;tone of voice</li>
+                <li>
+                    <strong>Produkce vizuálů</strong> — nástroj dle potřeby:
+                    <ul class="wiki-list" style="margin-top: var(--space-2)">
+                        <li><strong>Banner Ad Tool</strong> — brandované kreativy ze šablon, batch přes agenta</li>
+                        <li><strong>Google Whisk + Figma</strong> — generování podkladu + finalizace</li>
+                        <li><strong>Gemini Image Gen</strong> — AI podkladový obrázek</li>
+                        <li><strong>Video Ad Maker</strong> — animované video (Remotion)</li>
+                        <li><strong>Ad JSON → rebrand</strong> — přetvoření existující reklamy</li>
+                    </ul>
+                    Export ve formátech <code>1×1</code> (feed) a&nbsp;<code>9×16</code> (stories)
+                </li>
+                <li><strong>Sdílení copy</strong> (volitelné) — <code>/mdshare</code> → veřejný link pro odsouhlasení v&nbsp;týmu</li>
+                <li><strong>Založit kampaň</strong> — MetaAutomator MCP + skill <code>meta-campaign-orchestrator</code></li>
+                <li><strong>Finální kontrola</strong> — konverze, kreativy, texty, budget, schedule</li>
+            </ol>
+            <ul class="wiki-checklist">
+                <li>Konverze ověřeny a&nbsp;funkční</li>
+                <li>Copy pack vygenerován</li>
+                <li>Vizuály ve formátech 1×1 a&nbsp;9×16</li>
+                <li>Kampaň vytvořena přes MetaAutomator</li>
+                <li>Finální kontrola provedena</li>
+            </ul>
+
+            <div class="comment-panel" id="comments-meta-ads"></div>
+        </section>
+
+        <!-- 8. LinkedIn Ads -->
+        <section class="wiki-section" id="linkedin-ads">
+            <button class="section-comment-btn" onclick="toggleComments('linkedin-ads')" id="btn-linkedin-ads" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>8. Workflow: LinkedIn Ads</h2>
+            <div class="section-meta">
+                <span class="badge"><span class="owner owner--a">[A]</span></span>
+                <span class="badge">Manuálně, zatím bez automatizace</span>
+            </div>
+            <p>Kampaně zakládám a&nbsp;spravuju ručně v&nbsp;LinkedIn Campaign Manageru. Tracking přes LinkedIn Insight Tag nasazený <span class="owner owner--j">[J]</span> přes GTM.</p>
+
+            <div class="comment-panel" id="comments-linkedin-ads"></div>
+        </section>
+
+        <!-- 9. Google Ads -->
+        <section class="wiki-section" id="google-ads">
+            <button class="section-comment-btn" onclick="toggleComments('google-ads')" id="btn-google-ads" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>9. Workflow: Google Ads</h2>
+            <div class="section-meta">
+                <span class="badge"><span class="owner owner--j">[J]</span></span>
+                <span class="badge">DSA + RSA</span>
+            </div>
+
+            <div class="wiki-note">
+                <strong>DSA</strong> → hodně položek, které se průběžně mění (webináře, nabídky, katalog)<br>
+                <strong>RSA</strong> → přesné keyword targeting, kontrolovaný messaging
+            </div>
+
+            <h3>Větev A: DSA</h3>
+            <ol class="wiki-steps">
+                <li>Vzít vstupní URL a&nbsp;vytvořit skript do&nbsp;<strong>Google Sheetu</strong> — stahuje aktuální seznam položek</li>
+                <li>Na separátním listu se generuje <strong>page feed</strong></li>
+                <li>Feed uploadnout do&nbsp;Google Ads</li>
+                <li>Nastavit DSA kampaň nad aktuálním feedem</li>
+                <li>Provozní kontrola — feed se aktualizuje, kampaň cílí na&nbsp;aktuální položky</li>
+            </ol>
+
+            <h3>Větev B: RSA</h3>
+            <ol class="wiki-steps">
+                <li>Určit konkrétní <strong>landing page</strong></li>
+                <li><strong>Keyword research</strong> — keyword research skill z&nbsp;Aibility marketing skills</li>
+                <li>Připravit assety — headlines max&nbsp;<code>30</code> znaků, descriptions max&nbsp;<code>90</code> znaků</li>
+                <li>Průběžná péče — search terms report, negativní klíčová slova</li>
+            </ol>
+
+            <div class="comment-panel" id="comments-google-ads"></div>
+        </section>
+
+        <!-- 10. Analytics -->
+        <section class="wiki-section" id="analytics">
+            <button class="section-comment-btn" onclick="toggleComments('analytics')" id="btn-analytics" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>10. Workflow: Analytics &amp;&nbsp;Tracking</h2>
+            <div class="section-meta">
+                <span class="badge"><span class="owner owner--j">[J]</span></span>
+                <span class="badge">Při spouštění nové konverzní akce nebo platformy</span>
+            </div>
+
+            <ol class="wiki-steps">
+                <li><strong>Identifikovat akci</strong> — jednoznačná, opakovatelná, byznysový smysl (příklady: <code>assessment_started</code>, <code>webinar_registered</code>, <code>purchase</code>)</li>
+                <li><strong>Implementace v&nbsp;GTM</strong> — trigger + tag + mapování parametrů + consent management</li>
+                <li><strong>Test v&nbsp;GTM preview/debug</strong> (povinný gate) — trigger, consent, payload, žádné duplikáty</li>
+                <li><strong>Rollout do platforem</strong> — GA4 · PostHog · Meta Pixel · Google Ads Conversion · LinkedIn Pixel (každá platforma odděleně)</li>
+                <li><strong>Verifikace</strong> — ověřit v&nbsp;každé platformě individuálně, event zaregistrovat/potvrdit</li>
+                <li><strong>Připravenost pro kampaně</strong> — čekat na&nbsp;propagaci eventu, teprve pak použít jako konverzní cíl</li>
+            </ol>
+            <ul class="wiki-checklist">
+                <li>Měřitelná akce zvolena</li>
+                <li>GTM trigger + tag vytvořeny, consent nastaven</li>
+                <li>GTM preview test OK</li>
+                <li>Event rolloutnutý do GA4</li>
+                <li>Event rolloutnutý do PostHog</li>
+                <li>Event rolloutnutý do Meta Pixel</li>
+                <li>Event rolloutnutý do Google Ads Conversion</li>
+                <li>Event rolloutnutý do LinkedIn Pixel</li>
+                <li>Dostupnost pro kampaně ověřena</li>
+            </ul>
+
+            <div class="comment-panel" id="comments-analytics"></div>
+        </section>
+
+        <!-- 11. Automation Stack -->
+        <section class="wiki-section" id="automation">
+            <button class="section-comment-btn" onclick="toggleComments('automation')" id="btn-automation" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>11. Automation Stack</h2>
+
+            <h3>Cursor Commands — <span class="owner owner--a">[A]</span></h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Command</th><th>Co dělá</th><th>Oblast</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>/fupwebinar</code></td><td>Z transcript <code>.md</code> vygeneruje follow-up email (<code>.md</code> + <code>.html</code>)</td><td>Webináře</td></tr>
+                        <tr><td><code>/fupwebinartext</code></td><td>Jen textový draft follow-up emailu</td><td>Webináře</td></tr>
+                        <tr><td><code>/fupwebinarhtml</code></td><td>Jen HTML email z&nbsp;existujícího textového souboru</td><td>Webináře</td></tr>
+                        <tr><td><code>/AIMSfupmail</code></td><td>Follow-up email pro AI Morning Show</td><td>AI Morning Show</td></tr>
+                        <tr><td><code>/AIMScircle</code></td><td>Circle post k&nbsp;AI Morning Show → uloží jako <code>.md</code></td><td>AI Morning Show</td></tr>
+                        <tr><td><code>/AIEduNL</code></td><td>Newsletter pro nový týden AI Edu Streamu</td><td>AI Edu Stream</td></tr>
+                        <tr><td><code>/brevo</code></td><td>Uploadne HTML email do&nbsp;Brevo jako draft, odešle test</td><td>Email</td></tr>
+                        <tr><td><code>/circleedu</code></td><td>Postuje <code>.md</code> soubor do&nbsp;Circle Edu space</td><td>Circle</td></tr>
+                        <tr><td><code>/circlepost</code></td><td>Postuje <code>.md</code> soubor na&nbsp;Circle (jakýkoli space)</td><td>Circle</td></tr>
+                        <tr><td><code>/upload-social [P] [ČAS]</code></td><td>Posting na&nbsp;social media (IG, FB, LI, X, THR, TT, YT, PIN)</td><td>Social</td></tr>
+                        <tr><td><code>/socialpost-auto</code></td><td>Automatický upload z&nbsp;<code>.md</code> souboru s&nbsp;rozpisem</td><td>Social</td></tr>
+                        <tr><td><code>/generate-image "prompt"</code></td><td>Generuje obrázek přes Gemini 3 (OpenRouter API)</td><td>Vizuály</td></tr>
+                        <tr><td><code>/mdshare</code></td><td>Sdílí <code>.md</code> soubor jako veřejný link</td><td>Sdílení</td></tr>
+                        <tr><td><code>/urlimage</code></td><td>Uploadne obrázek na&nbsp;GitHub a&nbsp;vrátí veřejnou URL</td><td>Email / vizuály</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Cursor Commands — <span class="owner owner--j">[J]</span></h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Command</th><th>Oblast</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>meta-ads-image-headlines</code></td><td>Headlines pro Meta vizuály</td></tr>
+                        <tr><td><code>meta-ads-copy-pack</code></td><td>Kompletní copy pack pro Meta kampaně</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>API Integrace</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Integrace</th><th>Co dělá</th><th>Kdo</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Circle API</strong></td><td>Publikování přes <code>/circleedu</code>, <code>/circlepost</code></td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>Upload Post API</strong></td><td>Posting na&nbsp;social přes <code>/upload-social</code></td><td><span class="owner owner--a">[A]</span></td></tr>
+                        <tr><td><strong>MetaAutomator MCP</strong></td><td>Zakládání Meta kampaní z&nbsp;Cursoru</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Brevo API</strong></td><td>Upload HTML emailů</td><td><span class="owner owner--a">[A]</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Automatizace (cron)</h3>
+            <div class="wiki-card">
+                <h4>Slack Reminders — Webinář Ad Trigger</h4>
+                <p>Vercel Cron scrape <code>aibility.cz/webinare</code> každé 3&nbsp;dny. Pokud je webinář 10 nebo 14&nbsp;dní pryč → Slack zpráva → <span class="owner owner--aj">[A+J]</span> spustí ad kampaně.</p>
+            </div>
+            <div class="wiki-card">
+                <h4>Auto-Social Poster <em>(work in progress)</em></h4>
+                <p>Next.js app na&nbsp;Vercelu. Každé pondělí v&nbsp;6:00 scrape aibility.cz, vygeneruje posty pro <strong>X a&nbsp;Threads</strong> (brand voice, slop detection, deduplication) a&nbsp;naplánuje přes Upload Post API.</p>
+            </div>
+            <div class="wiki-card">
+                <h4>RSS Monitor — AI News</h4>
+                <p>Python tool, který monitoruje RSS feedy s&nbsp;AI novinkami, hodnotí jejich důležitost a&nbsp;kategorizuje je — podklad pro tvorbu social postů o&nbsp;AI novinkách.</p>
+            </div>
+
+            <div class="comment-panel" id="comments-automation"></div>
+        </section>
+
+        <!-- 12. Příležitosti -->
+        <section class="wiki-section" id="scaling">
+            <button class="section-comment-btn" onclick="toggleComments('scaling')" id="btn-scaling" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>12. Příležitosti ke Zlepšení</h2>
+            <p>Průběžně aktualizovat. Tady evidujeme bottlenecky a&nbsp;nápady na&nbsp;škálování.</p>
+
+            <h3>Nápady ke zvážení</h3>
+            <ul class="wiki-list">
+                <li><strong>End-to-end webinář pipeline</strong> — transcript → email + Circle + social → jedno spuštění, jeden command</li>
+                <li><strong>Newsletter template</strong> s&nbsp;dynamickými sekcemi — méně HTML ruční práce</li>
+                <li><strong>Unified content calendar</strong> v&nbsp;Airtable — newsletter + social + webináře na&nbsp;jednom místě</li>
+                <li><strong>Automatizovaný reporting dashboard</strong> — GA4 + Brevo + Upload Post API data</li>
+                <li><strong>A/B testování subject lines</strong> — Brevo to podporuje, zatím nevyužito systematicky</li>
+                <li><strong>Retargeting sekvence</strong> — web visitors → email → Meta retargeting</li>
+            </ul>
+
+            <h3>Kde jsme silní</h3>
+            <ul class="wiki-list">
+                <li>Cursor commands výrazně zrychlují repetitivní práci</li>
+                <li>Content atomization — jeden webinář → email + Circle + social posty</li>
+                <li>UTM naming convention konzistentní — data jsou čistá</li>
+                <li>Vlastní tooling (Banner Ad Tool, Video Ad Maker) — žádná závislost na&nbsp;broken SaaS API</li>
+                <li>Slack reminders automatizují trigger pro webinářové ad kampaně</li>
+            </ul>
+
+            <div class="comment-panel" id="comments-scaling"></div>
+        </section>
+
+        <!-- Appendix -->
+        <section class="wiki-section" id="appendix">
+            <button class="section-comment-btn" onclick="toggleComments('appendix')" id="btn-appendix" title="Přidat komentář"><i class="iconoir-message-text"></i></button>
+            <h2>Appendix: Naming Convention</h2>
+
+            <h3>Campaign Names</h3>
+            <div class="wiki-note">
+                Formát: <code>AIB_[PRODUCT]_[SOURCE]_[TYPE]_[PHASE]_[LANGUAGE]_[SUFFIX]</code>
+            </div>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Složka</th><th>Hodnoty</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>PROJECT</strong></td><td><code>AIB</code></td></tr>
+                        <tr><td><strong>PRODUCT</strong></td><td><code>AIM</code> (Aimee) · <code>EDU</code> (EDU Stream) · <code>WBN</code> (Webináře) · <code>GEN</code> (General) · <code>SP</code> (Superpowered Pro)</td></tr>
+                        <tr><td><strong>SOURCE</strong></td><td><code>BRO</code> (Brevo) · <code>FCB</code> (Facebook) · <code>ADS</code> (Google Ads) · <code>LIN</code> (LinkedIn) · <code>TWI</code> (Twitter) · <code>TIK</code> (TikTok)</td></tr>
+                        <tr><td><strong>TYPE</strong></td><td><code>1</code> Search · <code>2</code> Display · <code>3</code> Video · <code>4</code> PR · <code>5</code> Email · <code>6</code> Social</td></tr>
+                        <tr><td><strong>PHASE</strong></td><td><code>AWA</code> · <code>CON</code> · <code>DEC</code> · <code>RET</code></td></tr>
+                        <tr><td><strong>LANGUAGE</strong></td><td><code>CZE</code> · <code>ENG</code></td></tr>
+                        <tr><td><strong>SUFFIX</strong></td><td>Volný text, CamelCase, bez mezer</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="wiki-list">
+                <li>Webinář follow-up email: <code>AIB_WBN_BRO_5_RET_CZE_KlicAdopceAI</code></li>
+                <li>Newsletter leden 2026: <code>AIB_GEN_BRO_5_RET_CZE_NewsletterLeden26</code></li>
+                <li>Meta ad SP™: <code>AIB_SP_FCB_2_AWA_CZE_LaunchMar26</code></li>
+            </ul>
+
+            <h3>Soubory &amp;&nbsp;Složky</h3>
+            <div class="wiki-table-wrap">
+                <table class="wiki-table">
+                    <thead><tr><th>Obsah</th><th>Složka</th><th>Pojmenování</th></tr></thead>
+                    <tbody>
+                        <tr><td>Webinář follow-up</td><td><code>content/emails/Webinars/</code></td><td><code>[Název] - [DD.MM.YYYY] follow up [č].html</code></td></tr>
+                        <tr><td>Newsletter</td><td><code>content/emails/NEWSLETTER/</code></td><td><code>newsletter-[mesic]-[rok]-[tema].html</code></td></tr>
+                        <tr><td>Social posty</td><td><code>content/socials/texty/</code></td><td><code>[YYYY-MM-DD]-[tema].md</code></td></tr>
+                        <tr><td>Social grafiky</td><td><code>content/socials/vizuály/</code></td><td><code>[tema]_[format]_[varianta].png</code></td></tr>
+                        <tr><td>Webinář transcript</td><td><code>content/emails/Webinars/</code></td><td><code>[Název] - [DD.MM.YYYY] transcript.md</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="comment-panel" id="comments-appendix"></div>
+        </section>
+
+    </main>
+</div>
+
+<script src="js/main.js" defer></script>
+<script>
+    /* ── Comment Mode Toggle ── */
+    function toggleCommentMode() {
+        const body = document.getElementById('main-content');
+        const toggle = document.getElementById('commentToggle');
+        const isOn = body.classList.toggle('comment-mode-on');
+        toggle.classList.toggle('active', isOn);
+        toggle.innerHTML = isOn
+            ? '<i class="iconoir-message-text"></i> Komentáře zapnuty'
+            : '<i class="iconoir-message-text"></i> Komentáře';
+    }
+
+    /* ── Toggle comment panel ── */
+    function toggleComments(sectionId) {
+        const panel = document.getElementById('comments-' + sectionId);
+        const isOpen = panel.classList.toggle('open');
+        if (isOpen) renderComments(sectionId);
+    }
+
+    /* ── Load comments from localStorage ── */
+    function getComments(sectionId) {
+        try {
+            return JSON.parse(localStorage.getItem('wiki_comments_' + sectionId) || '[]');
+        } catch { return []; }
+    }
+
+    function saveComments(sectionId, comments) {
+        localStorage.setItem('wiki_comments_' + sectionId, JSON.stringify(comments));
+    }
+
+    /* ── Render comment panel HTML ── */
+    function renderComments(sectionId) {
+        const panel = document.getElementById('comments-' + sectionId);
+        const comments = getComments(sectionId);
+        const btn = document.getElementById('btn-' + sectionId);
+
+        // Update badge
+        if (comments.length > 0) {
+            btn.classList.add('has-comments');
+            let badge = btn.querySelector('.comment-count-badge');
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'comment-count-badge';
+                btn.appendChild(badge);
+            }
+            badge.textContent = comments.length;
+        }
+
+        panel.innerHTML = `
+            <div class="comment-list">
+                ${comments.length === 0
+                    ? '<p style="font-size:var(--text-sm);color:var(--color-text-tertiary);margin-bottom:var(--space-4)">Zatím žádné komentáře.</p>'
+                    : comments.map((c, i) => `
+                        <div class="comment-item">
+                            <div class="comment-item__author">${escHtml(c.author)}</div>
+                            <div class="comment-item__text">${escHtml(c.text)}</div>
+                            <div class="comment-item__date">${c.date} <button onclick="deleteComment('${sectionId}',${i})" style="background:none;border:none;cursor:pointer;color:var(--color-text-tertiary);font-size:11px;padding:0 4px">× smazat</button></div>
+                        </div>`).join('')
+                }
+            </div>
+            <div class="comment-form">
+                <div class="comment-form-row">
+                    <input type="text" id="author-${sectionId}" placeholder="Tvoje jméno" value="${localStorage.getItem('wiki_last_author') || ''}">
+                    <button class="comment-submit" onclick="addComment('${sectionId}')">Přidat</button>
+                </div>
+                <textarea id="text-${sectionId}" placeholder="Komentář, nápad nebo otázka ke&nbsp;této sekci…"></textarea>
+            </div>`;
+    }
+
+    function escHtml(s) {
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function addComment(sectionId) {
+        const author = document.getElementById('author-' + sectionId).value.trim() || 'Anonym';
+        const text = document.getElementById('text-' + sectionId).value.trim();
+        if (!text) return;
+        localStorage.setItem('wiki_last_author', author);
+        const comments = getComments(sectionId);
+        comments.push({ author, text, date: new Date().toLocaleDateString('cs-CZ', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+        saveComments(sectionId, comments);
+        renderComments(sectionId);
+    }
+
+    function deleteComment(sectionId, index) {
+        const comments = getComments(sectionId);
+        comments.splice(index, 1);
+        saveComments(sectionId, comments);
+        renderComments(sectionId);
+    }
+
+    /* ── Init badges for sections that already have comments ── */
+    function initCommentBadges() {
+        const sections = ['team','stack','webinare','newsletter','social','email-kampane','meta-ads','linkedin-ads','google-ads','analytics','automation','scaling','appendix'];
+        sections.forEach(id => {
+            const comments = getComments(id);
+            if (comments.length > 0) {
+                const btn = document.getElementById('btn-' + id);
+                if (btn) {
+                    btn.classList.add('has-comments');
+                    const badge = document.createElement('span');
+                    badge.className = 'comment-count-badge';
+                    badge.textContent = comments.length;
+                    btn.appendChild(badge);
+                }
+            }
+        });
+    }
+
+    /* ── Active sidebar link on scroll ── */
+    function initSidebarScroll() {
+        const sections = document.querySelectorAll('.wiki-section');
+        const navLinks = document.querySelectorAll('#sidebarNav a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    navLinks.forEach(a => {
+                        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+        sections.forEach(s => observer.observe(s));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initCommentBadges();
+        initSidebarScroll();
+    });
+</script>
+
+</body>
+</html>
