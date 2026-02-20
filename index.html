@@ -429,7 +429,7 @@
                         <tr><td><strong>Google Ads</strong></td><td><span class="owner owner--j">[J]</span></td><td data-edit="team-9">DSA + RSA kampaně</td></tr>
                         <tr><td><strong>LinkedIn Ads</strong></td><td><span class="owner owner--a">[A]</span></td><td data-edit="team-10">Placené kampaně na&nbsp;LinkedIn</td></tr>
                         <tr><td><strong>Analytics &amp;&nbsp;Tracking</strong></td><td><span class="owner owner--j">[J]</span></td><td data-edit="team-11">GTM, GA4, PostHog, pixely, consent</td></tr>
-                        <tr><td><strong>Webinář vizuály</strong></td><td><span class="owner owner--j">[J]</span></td><td data-edit="team-12">Základní promo grafiky pro webináře</td></tr>
+                        <tr><td><strong>Webinář a akce — vizuály</strong></td><td><span class="owner owner--j">[J]</span> větší akce <span class="owner owner--aj">[A+J]</span></td><td data-edit="team-12">Promo grafiky pro webináře; na větší akce se zapojuje i&nbsp;Aneta</td></tr>
                         <tr><td><strong>Konverzní měření</strong></td><td><span class="owner owner--j">[J]</span></td><td data-edit="team-13">Definice a&nbsp;nasazení konverzních eventů</td></tr>
                     </tbody>
                 </table>
@@ -477,8 +477,8 @@
                         <tr><td><strong>Gemini</strong> (standalone)</td><td data-edit="stack-6">Rychlé generování vizuálů bez Cursoru</td><td><span class="owner owner--a">[A]</span></td></tr>
                         <tr><td><strong>Trybloom.ai</strong></td><td data-edit="stack-7">Tvorba vizuálů a&nbsp;grafik</td><td><span class="owner owner--a">[A]</span></td></tr>
                         <tr><td><strong>Figma</strong></td><td data-edit="stack-8">Editace a&nbsp;finální úpravy vizuálů, finalizace ad kreativy</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
-                        <tr><td><strong>Banner Ad Tool</strong></td><td data-edit="stack-9">Webová aplikace — 8&nbsp;šablon (story + square), inline editor, AI generování, export PNG, batch tvorba kampaní přes agenta v&nbsp;Cursoru</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
-                        <tr><td><strong>Video Ad Maker</strong></td><td data-edit="stack-10">Animovaná reklamní videa z&nbsp;HTML šablon (Remotion + React), úpravy přes Cursor</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Banner Ad Tool</strong></td><td data-edit="stack-9">Webová aplikace od Verči — 8&nbsp;šablon (story + square), inline editor, AI generování, export PNG, batch tvorba kampaní přes agenta v&nbsp;Cursoru</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Video Ad Maker</strong></td><td data-edit="stack-10">Animovaná reklamní videa od Verči z&nbsp;HTML šablon (Remotion + React), úpravy přes Cursor</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
                         <tr><td><strong>HeyGen API</strong> <em>(plánováno)</em></td><td data-edit="stack-11">Generování video reklam s&nbsp;AI prezentátorem přímo z&nbsp;Cursoru</td><td><span class="owner owner--a">[A]</span></td></tr>
                         <tr><td><strong>Ad JSON → rebrand</strong></td><td data-edit="stack-12">Stažení popisu existující reklamy jako JSON, přetvoření pro Aibility brand</td><td><span class="owner owner--aj">[A+J]</span></td></tr>
                     </tbody>
@@ -521,6 +521,8 @@
                         <tr><td><strong>Meta Pixel + CAPI</strong></td><td data-edit="stack-23">Tracking konverzí pro Meta kampaně</td><td><span class="owner owner--j">[J]</span></td></tr>
                         <tr><td><strong>Google Ads Conversion</strong></td><td data-edit="stack-24">Tracking konverzí pro Google kampaně</td><td><span class="owner owner--j">[J]</span></td></tr>
                         <tr><td><strong>LinkedIn Insight Tag</strong></td><td data-edit="stack-25">B2B audience tracking a&nbsp;konverze</td><td><span class="owner owner--j">[J]</span></td></tr>
+                        <tr><td><strong>Campaign Overview Dashboard</strong></td><td data-edit="stack-26">Přehled aktivních kampaní (Meta, LinkedIn, Google) — spend, kliky, imprese, CTR. Data se načítají automaticky. <em>(work in progress)</em> <a href="https://campaign-overview-rust.vercel.app/" target="_blank" rel="noopener">→ link</a></td><td><span class="owner owner--aj">[A+J]</span></td></tr>
+                        <tr><td><strong>Data Dashboard</strong></td><td data-edit="stack-27">Rozšířený analytický dashboard. <em>(work in progress)</em> <a href="https://dashboard-eta-eight-17.vercel.app/" target="_blank" rel="noopener">→ link</a></td><td><span class="owner owner--aj">[A+J]</span></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -943,10 +945,11 @@
             <ul class="wiki-list">
                 <li data-edit="sc-1"><strong>End-to-end webinář pipeline</strong> — transcript → email + Circle + social → jedno spuštění, jeden command</li>
                 <li data-edit="sc-2"><strong>Newsletter template</strong> s&nbsp;dynamickými sekcemi — méně HTML ruční práce</li>
-                <li data-edit="sc-3"><strong>Unified content calendar</strong> v&nbsp;Airtable — newsletter + social + webináře na&nbsp;jednom místě</li>
-                <li data-edit="sc-4"><strong>Automatizovaný reporting dashboard</strong> — GA4 + Brevo + Upload Post API data</li>
+                <li data-edit="sc-3"><strong>Unified content calendar</strong> — newsletter + social + webináře na&nbsp;jednom místě, ideálně propojeno s&nbsp;Cursorem</li>
+                <li data-edit="sc-4">✅ <strong>Reporting dashboards</strong> — Campaign Overview a&nbsp;Data Dashboard existují a&nbsp;trackujeme automaticky, stále work in progress (Meta, LinkedIn, Google, GA4)</li>
                 <li data-edit="sc-5"><strong>A/B testování subject lines</strong> — Brevo to podporuje, zatím nevyužito systematicky</li>
                 <li data-edit="sc-6"><strong>Retargeting sekvence</strong> — web visitors → email → Meta retargeting</li>
+                <li data-edit="sc-7"><strong>Větší automatizace tvorby kampaní</strong> — od briefu přes copy až po nahrání do ad manageru s&nbsp;minimem ručních kroků</li>
             </ul>
 
             <h3>Kde jsme silní</h3>
@@ -954,7 +957,7 @@
                 <li data-edit="sc-str1">Cursor commands výrazně zrychlují repetitivní práci</li>
                 <li data-edit="sc-str2">Content atomization — jeden webinář → email + Circle + social posty</li>
                 <li data-edit="sc-str3">UTM naming convention konzistentní — data jsou čistá</li>
-                <li data-edit="sc-str4">Vlastní tooling (Banner Ad Tool, Video Ad Maker) — žádná závislost na&nbsp;broken SaaS API</li>
+                <li data-edit="sc-str4">Vlastní tooling (Banner Ad Tool a&nbsp;Video Ad Maker od Verči, Social Visual Editor) — žádná závislost na&nbsp;broken SaaS API</li>
                 <li data-edit="sc-str5">Slack reminders automatizují trigger pro webinářové ad kampaně</li>
             </ul>
 
