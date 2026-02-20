@@ -378,6 +378,12 @@
             <button class="topbar-btn" id="commentBtn" onclick="toggleAllComments()">
                 <i class="iconoir-message-text"></i> Komentáře
             </button>
+            <button class="topbar-btn" id="copyMdBtn" onclick="copyMarkdown()">
+                <i class="iconoir-copy"></i> Kopírovat MD
+            </button>
+            <a class="topbar-btn" href="MARKETING-TEAM-WORKFLOW.md" download="MARKETING-TEAM-WORKFLOW.md">
+                <i class="iconoir-download"></i> Stáhnout MD
+            </a>
         </div>
     </div>
 
@@ -1035,6 +1041,24 @@ const SECTIONS = ['team','stack','webinare','newsletter','social','email-kampane
    EDIT MODE
 ══════════════════════════════════════ */
 let editModeOn = false;
+
+async function copyMarkdown() {
+    const btn = document.getElementById('copyMdBtn');
+    try {
+        const res = await fetch('MARKETING-TEAM-WORKFLOW.md');
+        const text = await res.text();
+        await navigator.clipboard.writeText(text);
+        btn.innerHTML = '<i class="iconoir-check"></i> Zkopírováno!';
+        btn.classList.add('active');
+        setTimeout(() => {
+            btn.innerHTML = '<i class="iconoir-copy"></i> Kopírovat MD';
+            btn.classList.remove('active');
+        }, 2500);
+    } catch (e) {
+        btn.innerHTML = '<i class="iconoir-xmark"></i> Chyba';
+        setTimeout(() => { btn.innerHTML = '<i class="iconoir-copy"></i> Kopírovat MD'; }, 2000);
+    }
+}
 
 function toggleEditMode() {
     editModeOn = !editModeOn;
